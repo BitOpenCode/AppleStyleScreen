@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+    <div class="app-skeleton">
+        <header class="app-header">
+            <div class="logo-button">
+                <button class="logo-button__button">
+                    ECOS
+                </button>
+            </div>
+            <div class="connect-wallet">
+                <button class="connect-wallet__button">
+                    <i class="fas fa-wallet"></i>
+                    Connect Wallet
+                </button>
+            </div>
+            <div class="header-actions">
+                <a href="#" class="header-action-link">
+                    <i class="fas fa-bell header-action-icon"></i>
+                    <span class="header-action-badge">3</span>
+                </a>
+                <a href="#" class="header-action-link">
+                    <i class="fas fa-cog header-action-icon"></i>
+                </a>
+            </div>
+        </header>
+
+        <div class="stats-bar">
+            <div class="stats-item">
+                <i class="fab fa-bitcoin stats-icon"></i>
+                <span class="stats-value">1.6688 BTC</span>
+            </div>
+            <div class="stats-item">
+                <i class="fas fa-coins stats-icon"></i>
+                <span class="stats-value">20147 ECOS Points</span>
+            </div>
+            <div class="stats-item">
+                <i class="fas fa-level-up-alt stats-icon"></i>
+                <span class="stats-value">LVL 0/10</span>
+            </div>
+        </div>
+
+        <main class="app-main">
+            <div class="circular-buttons">
+                <div class="circular-button">
+                    <span>200kw/1000kw</span>
+                </div>
+                <div class="circular-button">
+                    <span>234Th</span>
+                </div>
+                <div class="circular-button">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Progress</span>
+                </div>
+            </div>
+            <div class="timer">5:33:10</div>
+            <button class="start-mining-button">Start Mining</button>
+            <div class="game-content">
+                <div class="asic-miner">
+                    <div class="asic-miner__image"></div>
+                    <div class="asic-miner__text">ASIC Miner</div>
+                </div>
+                <div class="game-buttons">
+                    <div class="game-buttons__left">
+                        <button class="game-button game-button--primary">
+                            <i class="fas fa-bolt"></i>
+                            Daily Combo
+                        </button>
+                        <button class="game-button game-button--secondary">
+                            <i class="fas fa-gift"></i>
+                            Special Offers
+                        </button>
+                    </div>
+                    <div class="game-buttons__right">
+                        <button class="game-button game-button--primary">
+                            <i class="fas fa-tasks"></i>
+                            Daily Tasks
+                        </button>
+                        <button class="game-button game-button--secondary">
+                            <i class="fas fa-arrow-up"></i>
+                            Upgrade
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <nav class="bottom-nav">
+            <ul class="bottom-nav__list">
+                <li class="bottom-nav__item">
+                    <a href="#" class="bottom-nav__link">
+                        <i class="fas fa-store bottom-nav__icon"></i>
+                        <span class="bottom-nav__text">Store</span>
+                    </a>
+                </li>
+                <li class="bottom-nav__item">
+                    <a href="#" class="bottom-nav__link">
+                        <i class="fas fa-chart-line bottom-nav__icon"></i>
+                        <span class="bottom-nav__text">Stat</span>
+                    </a>
+                </li>
+                <li class="bottom-nav__item">
+                    <a href="#" class="bottom-nav__link bottom-nav__link--active">
+                        <i class="fas fa-home bottom-nav__icon"></i>
+                        <span class="bottom-nav__text">Home</span>
+                    </a>
+                </li>
+                <li class="bottom-nav__item">
+                    <a href="#" class="bottom-nav__link">
+                        <i class="fas fa-coins bottom-nav__icon"></i>
+                        <span class="bottom-nav__text">Earn</span>
+                    </a>
+                </li>
+                <li class="bottom-nav__item">
+                    <a href="#" class="bottom-nav__link">
+                        <i class="fas fa-wallet bottom-nav__icon"></i>
+                        <span class="bottom-nav__text">Wallet</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let startMiningButton = document.querySelector('.start-mining-button');
+            let timerDisplay = document.querySelector('.timer');
+            let btcBalanceDisplay = document.querySelector('.stats-item:first-child .stats-value');
+            let energyDisplay = document.querySelector('.circular-button:first-child span');
+
+            let miningInterval;
+            const miningDuration = 1 * 60; // 1 minute in seconds
+            const profitAmount = 0.0001287;
+            const energyCostPerSession = 3.51; // Energy cost for one mining session
+            let timeRemaining = miningDuration;
+
+            function formatTime(seconds) {
+                const h = Math.floor(seconds / 3600);
+                const m = Math.floor((seconds % 3600) / 60);
+                const s = seconds % 60;
+                return `${h}:${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+            }
+
+            function updateTimerDisplay() {
+                if (timerDisplay) {
+                     timerDisplay.textContent = formatTime(timeRemaining);
+                }
+            }
+
+            function addProfit() {
+                // Re-select btcBalanceDisplay before using it
+                const currentBtcBalanceDisplay = document.querySelector('.stats-item:first-child .stats-value');
+                if (!currentBtcBalanceDisplay) { // Add a check just in case
+                     console.error('BTC balance element not found.');
+                     return;
+                }
+                try {
+                    const currentBtcText = currentBtcBalanceDisplay.textContent;
+                    const currentBtcValue = parseFloat(currentBtcText.replace(' BTC', ''));
+                    if (!isNaN(currentBtcValue)) {
+                        const newBtcValue = currentBtcValue + profitAmount;
+                        currentBtcBalanceDisplay.textContent = `${newBtcValue.toFixed(8)} BTC`;
+                    } else {
+                         console.error('Could not parse current BTC value:', currentBtcText);
+                    }
+                } catch (error) {
+                    console.error('Error adding profit:', error);
+                }
+            }
+
+            function handleButtonClick(targetButton) {
+                // Re-select energyDisplay and timerDisplay before using them
+                const currentEnergyDisplay = document.querySelector('.circular-button:first-child span');
+                const currentTimerDisplay = document.querySelector('.timer');
+
+                if (!currentEnergyDisplay || !currentTimerDisplay) { // Add a check just in case
+                     console.error('Energy or Timer element not found.');
+                     return;
+                }
+
+                if (targetButton.textContent === 'Start Mining') {
+                    // Check and consume energy before starting
+                    const energyText = currentEnergyDisplay.textContent;
+                    const energyMatch = energyText.match(/^(\d+(\.\d+)?)(?:kw)?\/(\d+(\.\d+)?)(?:kw)?$/);
+
+                    if (energyMatch) {
+                        let currentEnergy = parseFloat(energyMatch[1]);
+                        const maxEnergy = parseFloat(energyMatch[3]);
+
+                        if (!isNaN(currentEnergy) && currentEnergy >= energyCostPerSession) {
+                            // Deduct energy
+                            currentEnergy -= energyCostPerSession;
+                            // Update energy display
+                            currentEnergyDisplay.textContent = `${currentEnergy.toFixed(2)}kw/${maxEnergy}kw`;
+
+                            // Start Mining
+                            targetButton.disabled = true;
+                            targetButton.textContent = 'Mining...';
+                            currentTimerDisplay.style.visibility = 'visible';
+
+                            timeRemaining = miningDuration;
+                            // Use a local variable for interval and clear it correctly
+                            let currentMiningInterval = setInterval(() => {
+                                timeRemaining--;
+                                // Make sure to update the correct timer display
+                                if (document.querySelector('.timer')){
+                                     document.querySelector('.timer').textContent = formatTime(timeRemaining);
+                                }
+
+
+                                if (timeRemaining <= 0) {
+                                    clearInterval(currentMiningInterval); // Clear the current interval
+                                    targetButton.disabled = false; // Enable button
+                                    targetButton.textContent = 'Claim'; // Change text to Claim
+                                    if (document.querySelector('.timer')){
+                                         document.querySelector('.timer').style.visibility = 'hidden'; // Hide timer
+                                    }
+                                }
+                            }, 1000);
+                            // Store the interval ID in the outer scope to clear it later if needed (e.g., on screen change)
+                             miningInterval = currentMiningInterval;
+
+                        } else {
+                            // Insufficient energy
+                            alert('Недостаточно энергии для майнинга!');
+                        }
+                    } else {
+                         console.error('Could not parse energy value:', energyText);
+                         alert('Ошибка определения количества энергии.');
+                    }
+                } else if (targetButton.textContent === 'Claim') {
+                    // Claim Profit
+                    addProfit();
+                    targetButton.textContent = 'Start Mining';
+                }
+                // If text is 'Mining...', do nothing (button is disabled)
+            }
+
+            // Initial display setup
+            if (timerDisplay) {
+                 timerDisplay.textContent = formatTime(miningDuration);
+                 timerDisplay.style.visibility = 'hidden'; // Initially hide timer
+            }
+
+            // Use event delegation for the start mining button
+             const appMain = document.querySelector('.app-main');
+
+             if (appMain) {
+                 appMain.addEventListener('click', (event) => {
+                     const targetButton = event.target.closest('.start-mining-button');
+                     if (targetButton) {
+                         handleButtonClick(targetButton);
+                     }
+                 });
+             }
+
+            // Store the initial HTML of app-main
+            const initialAppMainContent = appMain ? appMain.innerHTML : '';
+
+            // Add event listener to the Store button
+            const storeButton = document.querySelector('.bottom-nav__link i.fas.fa-store').closest('a');
+
+            if (storeButton && appMain) {
+                storeButton.addEventListener('click', (event) => {
+                    event.preventDefault(); // Prevent default link behavior
+
+                    console.log('Store button clicked!'); // Log when Store button is clicked
+
+                    // Before changing content, clear any running mining interval
+                    if (miningInterval) {
+                        clearInterval(miningInterval);
+                        console.log('Mining interval cleared (Store).'); // Log when interval is cleared for Store
+                    }
+
+                    // Generate HTML for the Store screen
+                    const storeScreenHTML = `
+                        <div class="store-filter-bar">
+                            <button class="filter-button active">Premium</button>
+                            <button class="filter-button">ASICs</button>
+                            <button class="filter-button">ECOS Points</button>
+                            <button class="filter-button">Energy</button>
+                            <button class="filter-button">Boosts</button>
+                            <button class="filter-button">Land</button>
+                            <button class="filter-button">Datacenter</button>
+                            <button class="filter-button">EnergyStation</button>
+                        </div>
+                        <div id="store-content-area">
+                            <!-- Content below filter bar will be loaded here based on filter selection -->
+                        </div>
+                    `;
+
+                    appMain.innerHTML = storeScreenHTML; // Replace content with filter bar and content area
+                    console.log('appMain content set for Store:', appMain.innerHTML); // Log the content being set
+
+                    // Get the content area element
+                    const storeContentArea = appMain.querySelector('#store-content-area');
+
+                    // Function to load content based on filter
+                    const loadStoreContent = (filterType) => {
+                        let contentHTML = '';
+                        if (filterType === 'Premium') {
+                            contentHTML = `
+                                <div class="store-subfilter">
+                                     <button class="store-subfilter__button active">TON</button>
+                                     <button class="store-subfilter__button">Stars</button>
+                                </div>
+                                <div class="store-item-slots">
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">Premium 7 days</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">Premium 15 days</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">Premium 30 days</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                </div>
+                            `;
+                        } else if (filterType === 'ASICs') {
+                            const asicAmounts = [1, 20, 50, 100, 200, 500, 1000, 5000];
+                            const asicPrices = [6250, 125000, 312500, 625000, 1250000, 3125000, 6250000, 12500000]; // Prices in ECOS Points
+                            let asicSlotsHTML = '';
+                            asicAmounts.forEach((amount, index) => {
+                                const price = asicPrices[index];
+                                asicSlotsHTML += `
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">${amount} ASIC</div>
+                                        <div class="item-price">${price} ECOS Points</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                `;
+                            });
+                            contentHTML = `<div class="store-item-slots">${asicSlotsHTML}</div>`;
+                        } else if (filterType === 'ECOS Points') {
+                            contentHTML = `
+                                <div class="store-subfilter">
+                                     <button class="store-subfilter__button active">TON</button>
+                                     <button class="store-subfilter__button">Stars</button>
+                                </div>
+                                <div class="store-item-slots">
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">5000 ECOS Points</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">10000 ECOS Points</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">15000 ECOS Points</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">20000 ECOS Points</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">50000 ECOS Points</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">100000 ECOS Points</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            contentHTML = `<h2>${filterType} Content</h2><p>Content for ${filterType} will go here.</p>`;
+                        }
+                        if (storeContentArea) {
+                             storeContentArea.innerHTML = contentHTML;
+                             console.log(`Content loaded for filter: ${filterType}`);
+                        }
+                    };
+
+                    // Load default content (Premium) when Store screen opens
+                    loadStoreContent('Premium');
+
+                    // Add click handlers for filter buttons
+                    const filterButtons = appMain.querySelectorAll('.filter-button');
+                    filterButtons.forEach(button => {
+                        button.addEventListener('click', () => {
+                            // Remove active class from all buttons
+                            filterButtons.forEach(btn => btn.classList.remove('active'));
+                            // Add active class to clicked button
+                            button.classList.add('active');
+                            // Load content for selected filter
+                            loadStoreContent(button.textContent);
+                        });
+                    });
+
+                    // Add event listeners to filter buttons using delegation on appMain
+                     appMain.addEventListener('click', (event) => {
+                         const filterButton = event.target.closest('.filter-button');
+                         if (filterButton) {
+                             // Remove active class from all filter buttons
+                             appMain.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
+                             // Add active class to the clicked button
+                             filterButton.classList.add('active');
+                             // Load content based on the clicked filter's text
+                             loadStoreContent(filterButton.textContent);
+                         }
+
+                         // Add event listener for subfilter buttons (TON/Stars) using delegation
+                          const subfilterButton = event.target.closest('.store-subfilter__button');
+                          if (subfilterButton) {
+                               // Handle subfilter click (e.g., update active class for subfilter buttons)
+                              console.log(`Subfilter button clicked: ${subfilterButton.textContent}`);
+                               // Remove active class from all subfilter buttons
+                              appMain.querySelectorAll('.store-subfilter__button').forEach(btn => btn.classList.remove('active'));
+                               // Add active class to the clicked subfilter button
+                              subfilterButton.classList.add('active');
+                               // Add logic here to filter items based on subfilter
+                          }
+
+                         // Add event listener for Buy buttons using delegation
+                          const buyButton = event.target.closest('.buy-button');
+                          if (buyButton) {
+                              // Handle buy button click
+                             const itemSlot = buyButton.closest('.store-item-slot');
+                             const itemText = itemSlot ? itemSlot.querySelector('.item-text').textContent : 'Unknown Item';
+                              console.log(`Buy button clicked for item: ${itemText}`);
+                               // Add your purchase logic here
+                               alert(`Покупка: ${itemText}`);
+                          }
+                     });
+
+
+                    // Optionally update active class for navigation links
+                    document.querySelectorAll('.bottom-nav__link').forEach(link => link.classList.remove('bottom-nav__link--active'));
+                    storeButton.classList.add('bottom-nav__link--active');
+                    console.log('Active class updated for Store button.');
+
+                    // Clear references to old elements (these might be re-selected within loadStoreContent if needed)
+                    startMiningButton = null;
+                    timerDisplay = null;
+                    // btcBalanceDisplay and energyDisplay are re-selected in their functions
+                });
+            }
+
+            // Add event listener to the Home button to switch back to home content
+            const homeButton = document.querySelector('.bottom-nav__link i.fas.fa-home').closest('a');
+
+            if (homeButton && appMain && initialAppMainContent) {
+                 homeButton.addEventListener('click', (event) => {
+                    event.preventDefault(); // Prevent default link behavior
+
+                    console.log('Home button clicked!'); // Log when Home button is clicked
+                    console.log('Initial appMain content stored:', initialAppMainContent); // Log the stored content
+
+                    // Before restoring content, clear any running mining interval
+                    if (miningInterval) {
+                        clearInterval(miningInterval);
+                        console.log('Mining interval cleared.'); // Log when interval is cleared
+                    }
+                    // Restore the initial app-main content
+                    appMain.innerHTML = initialAppMainContent;
+                    console.log('appMain content restored.'); // Log after restoring content
+
+                    // Re-select elements and update outer scope references
+                    startMiningButton = appMain.querySelector('.start-mining-button');
+                    timerDisplay = appMain.querySelector('.timer');
+                    // btcBalanceDisplay and energyDisplay will be re-selected within their functions
+
+                    console.log('startMiningButton after restore:', startMiningButton); // Log re-selected startMiningButton
+                    console.log('timerDisplay after restore:', timerDisplay); // Log re-selected timerDisplay
+
+                    // Ensure timer visibility is correct after restoring
+                    if (startMiningButton && timerDisplay) { // Add checks
+                         if (startMiningButton.textContent !== 'Mining...') {
+                             timerDisplay.style.visibility = 'hidden';
+                             console.log('Timer visibility set to hidden.');
+                         } else {
+                              timerDisplay.style.visibility = 'visible';
+                              console.log('Timer visibility set to visible.');
+                         }
+                         updateTimerDisplay(); // Update timer display with current timeRemaining
+                         console.log('Timer display updated.');
+                    }
+
+                    // Optionally update active class for navigation links
+                    document.querySelectorAll('.bottom-nav__link').forEach(link => link.classList.remove('bottom-nav__link--active'));
+                    homeButton.classList.add('bottom-nav__link--active');
+                    console.log('Active class updated for Home button.');
+
+                 });
+            }
+
+             // Initialize active class on page load
+            const activeLink = document.querySelector('.bottom-nav__link--active');
+            if (activeLink) {
+                activeLink.classList.remove('bottom-nav__link--active');
+            }
+            // Find the Home button again after potential content changes (though it shouldn't change here)
+             const initialHomeButton = document.querySelector('.bottom-nav__link i.fas.fa-home').closest('a');
+             if(initialHomeButton) {
+                initialHomeButton.classList.add('bottom-nav__link--active');
+             }
+
+            // Add event listener to the Stat button
+            const statButton = document.querySelector('.bottom-nav__link i.fas.fa-chart-line').closest('a');
+
+            if (statButton && appMain) {
+                statButton.addEventListener('click', (event) => {
+                    event.preventDefault(); // Prevent default link behavior
+                    // Before changing content, clear any running mining interval
+                    if (miningInterval) {
+                        clearInterval(miningInterval);
+                    }
+                    appMain.innerHTML = '<h2>Stat Screen Content</h2><p>This is where the statistics content will go.</p>'; // Replace content
+                    // Optionally update active class for navigation links
+                    document.querySelectorAll('.bottom-nav__link').forEach(link => link.classList.remove('bottom-nav__link--active'));
+                    statButton.classList.add('bottom-nav__link--active');
+
+                    // Clear references to elements that are not on the stat screen
+                    startMiningButton = null;
+                    timerDisplay = null;
+                     // btcBalanceDisplay and energyDisplay might be needed on stat screen, depending on content
+                     // For now, clear their references to be safe
+                    btcBalanceDisplay = null;
+                    energyDisplay = null;
+
+                });
+            }
+
+            // Add event listener to the Earn button
+            const earnButton = document.querySelector('.bottom-nav__link i.fas.fa-coins').closest('a');
+
+            if (earnButton && appMain) {
+                earnButton.addEventListener('click', (event) => {
+                    event.preventDefault(); // Prevent default link behavior
+                     // Before changing content, clear any running mining interval
+                    if (miningInterval) {
+                        clearInterval(miningInterval);
+                    }
+                    appMain.innerHTML = '<h2>Earn Screen Content</h2><p>This is where the earn content will go.</p>'; // Replace content
+                    // Optionally update active class for navigation links
+                    document.querySelectorAll('.bottom-nav__link').forEach(link => link.classList.remove('bottom-nav__link--active'));
+                    earnButton.classList.add('bottom-nav__link--active');
+
+                     // Clear references to elements that are not on the earn screen
+                    startMiningButton = null;
+                    timerDisplay = null;
+                    btcBalanceDisplay = null;
+                    energyDisplay = null;
+
+                });
+            }
+
+            // Add event listener to the Wallet button
+            const walletButton = document.querySelector('.bottom-nav__link i.fas.fa-wallet').closest('a');
+
+            if (walletButton && appMain) {
+                walletButton.addEventListener('click', (event) => {
+                    event.preventDefault(); // Prevent default link behavior
+                     // Before changing content, clear any running mining interval
+                    if (miningInterval) {
+                        clearInterval(miningInterval);
+                    }
+                    appMain.innerHTML = `
+                        <div class="store-filter-bar">
+                            <button class="filter-button">Premium</button>
+                            <button class="filter-button">ASICs</button>
+                            <button class="filter-button">ECOS Points</button>
+                            <button class="filter-button">Energy</button>
+                            <button class="filter-button">Boosts</button>
+                            <button class="filter-button">Land</button>
+                            <button class="filter-button">Datacenter</button>
+                            <button class="filter-button">EnergyStation</button>
+                        </div>
+                        <h2>Store Screen Content</h2>
+                        <p>This is where the store content will go.</p>
+                    `; // Replace content
+                    // Optionally update active class for navigation links
+                    document.querySelectorAll('.bottom-nav__link').forEach(link => link.classList.remove('bottom-nav__link--active'));
+                    walletButton.classList.add('bottom-nav__link--active');
+
+                     // Clear references to elements that are not on the wallet screen
+                    startMiningButton = null;
+                    timerDisplay = null;
+                    btcBalanceDisplay = null;
+                    energyDisplay = null;
+
+                });
+            }
+
+        });
+    </script>
+</body>
+</html> 
