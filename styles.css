@@ -492,33 +492,9 @@ body {
     text-shadow: 0 0 10px var(--colors-primary--500);
 }
 
-.start-mining-button {
-    position: absolute;
-    bottom: 1.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--colors-primary--500);
-    border: none;
-    color: var(--colors-on_primary--500);
-    padding: 1rem 3rem;
-    font-family: var(--fonts-primary);
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border-radius: 12px;
-    z-index: 100;
-    min-width: 300px;
-}
-
-.start-mining-button:hover {
-    background-color: var(--colors-primary--600);
-    transform: scale(1.02);
-}
-
 .circular-buttons {
     position: absolute;
-    bottom: 7rem;
+    bottom: 5rem;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -615,20 +591,21 @@ body {
 
 .asic-miner {
     position: absolute;
-    top: 65%;
+    top: -40%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 200px;
     height: 200px;
-    background-color: var(--colors-bg--300);
-    border: 2px solid var(--colors-primary--500);
-    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: none;
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-shadow: var(--ui-glow);
-    animation: cyberpunkGlow 4s infinite;
+    box-shadow: var(--ui-elevation--1);
     padding: 1rem;
 }
 
@@ -935,4 +912,27 @@ body {
 
 .buy-button:hover {
     background-color: #e67e00;
+}
+
+.start-mining-button {
+    position: absolute;
+    bottom: 0.2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--colors-primary--500);
+    border: none;
+    color: var(--colors-on_primary--500);
+    padding: 1rem 3rem;
+    font-family: var(--fonts-primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 12px;
+    z-index: 100;
+    min-width: 300px;
+}
+
+.start-mining-button:hover {
+    background-color: var(--colors-primary--600);
 }
