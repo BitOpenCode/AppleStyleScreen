@@ -951,12 +951,20 @@
 
                     // Обработчик кнопки Yes в модальном окне
                     document.getElementById('confirm-exchange').addEventListener('click', () => {
+                        console.log('Confirm exchange button clicked');
+                        
                         const btcAmount = parseFloat(document.getElementById('btc-amount').value);
                         const ecosAmount = parseFloat(document.getElementById('ecos-amount').value);
                         
-                        // Получаем текущие балансы
-                        const currentBtcBalance = parseFloat(document.getElementById('btc-balance').textContent);
-                        const currentEcosBalance = parseFloat(document.getElementById('ecos-balance').textContent);
+                        console.log('BTC Amount:', btcAmount);
+                        console.log('ECOS Amount:', ecosAmount);
+                        
+                        // Получаем текущие балансы, убирая текст "BTC" и "ECOS Points"
+                        const currentBtcBalance = parseFloat(document.getElementById('btc-balance').textContent.replace(' BTC', ''));
+                        const currentEcosBalance = parseFloat(document.getElementById('ecos-balance').textContent.replace(' ECOS Points', ''));
+                        
+                        console.log('Current BTC Balance:', currentBtcBalance);
+                        console.log('Current ECOS Balance:', currentEcosBalance);
                         
                         // Проверяем, достаточно ли BTC
                         if (currentBtcBalance >= btcAmount) {
@@ -964,13 +972,11 @@
                             const newBtcBalance = (currentBtcBalance - btcAmount).toFixed(8);
                             const newEcosBalance = Math.floor(currentEcosBalance + ecosAmount);
                             
-                            // Обновляем отображение балансов
-                            document.getElementById('btc-balance').textContent = newBtcBalance + ' BTC';
-                            document.getElementById('ecos-balance').textContent = newEcosBalance + ' ECOS Points';
+                            console.log('New BTC Balance:', newBtcBalance);
+                            console.log('New ECOS Balance:', newEcosBalance);
                             
-                            // Обновляем балансы в localStorage
-                            localStorage.setItem('btcBalance', newBtcBalance);
-                            localStorage.setItem('ecosBalance', newEcosBalance);
+                            // Обновляем все балансы в интерфейсе
+                            updateAllBalances(newBtcBalance, newEcosBalance);
                             
                             // Очищаем поля ввода
                             document.getElementById('btc-amount').value = '';
@@ -985,6 +991,37 @@
                             alert('Insufficient BTC balance');
                         }
                     });
+
+                    // Функция обновления балансов во всех местах
+                    function updateAllBalances(btcBalance, ecosBalance) {
+                        console.log('Updating balances:', btcBalance, ecosBalance);
+                        
+                        // Обновляем в панели статистики
+                        const statsValues = document.querySelectorAll('.stats-value');
+                        if (statsValues.length >= 2) {
+                            statsValues[0].textContent = btcBalance + ' BTC';
+                            statsValues[1].textContent = ecosBalance + ' ECOS Points';
+                            console.log('Updated stats BTC:', statsValues[0].textContent);
+                            console.log('Updated stats ECOS:', statsValues[1].textContent);
+                        }
+                        
+                        // Обновляем в Wallet
+                        const walletBtc = document.getElementById('btc-balance');
+                        const walletEcos = document.getElementById('ecos-balance');
+                        
+                        if (walletBtc) {
+                            walletBtc.textContent = btcBalance + ' BTC';
+                            console.log('Updated wallet BTC:', walletBtc.textContent);
+                        }
+                        if (walletEcos) {
+                            walletEcos.textContent = ecosBalance + ' ECOS Points';
+                            console.log('Updated wallet ECOS:', walletEcos.textContent);
+                        }
+                        
+                        // Сохраняем в localStorage
+                        localStorage.setItem('btcBalance', btcBalance);
+                        localStorage.setItem('ecosBalance', ecosBalance);
+                    }
 
                     // Обработчик кнопки No в модальном окне
                     document.getElementById('cancel-exchange').addEventListener('click', () => {
