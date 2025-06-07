@@ -294,7 +294,90 @@
                             <button class="filter-button">EnergyStation</button>
                         </div>
                         <div id="store-content-area">
-                            <!-- Content below filter bar will be loaded here based on filter selection -->
+                            <div class="filter-content" id="energy-content">
+                                <div class="store-slots">
+                                    <div class="store-slot">
+                                        <div class="slot-content">
+                                            <div class="slot-icon">⚡</div>
+                                            <div class="slot-info">
+                                                <div class="slot-name">90 kW</div>
+                                                <div class="slot-price">90 ECOS Points</div>
+                                            </div>
+                                        </div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-slot">
+                                        <div class="slot-content">
+                                            <div class="slot-icon">⚡</div>
+                                            <div class="slot-info">
+                                                <div class="slot-name">350 kW</div>
+                                                <div class="slot-price">17.36 ECOS Points</div>
+                                            </div>
+                                        </div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-slot">
+                                        <div class="slot-content">
+                                            <div class="slot-icon">⚡</div>
+                                            <div class="slot-info">
+                                                <div class="slot-name">1800 kW</div>
+                                                <div class="slot-price">89.28 ECOS Points</div>
+                                            </div>
+                                        </div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-slot">
+                                        <div class="slot-content">
+                                            <div class="slot-icon">⚡</div>
+                                            <div class="slot-info">
+                                                <div class="slot-name">11000 kW</div>
+                                                <div class="slot-price">545.60 ECOS Points</div>
+                                            </div>
+                                        </div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-slot">
+                                        <div class="slot-content">
+                                            <div class="slot-icon">⚡</div>
+                                            <div class="slot-info">
+                                                <div class="slot-name">18000 kW</div>
+                                                <div class="slot-price">892.80 ECOS Points</div>
+                                            </div>
+                                        </div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-slot">
+                                        <div class="slot-content">
+                                            <div class="slot-icon">⚡</div>
+                                            <div class="slot-info">
+                                                <div class="slot-name">72300 kW</div>
+                                                <div class="slot-price">3586.08 ECOS Points</div>
+                                            </div>
+                                        </div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-slot">
+                                        <div class="slot-content">
+                                            <div class="slot-icon">⚡</div>
+                                            <div class="slot-info">
+                                                <div class="slot-name">253300 kW</div>
+                                                <div class="slot-price">12563.68 ECOS Points</div>
+                                            </div>
+                                        </div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-slot">
+                                        <div class="slot-content">
+                                            <div class="slot-icon">⚡</div>
+                                            <div class="slot-info">
+                                                <div class="slot-name">1267100 kW</div>
+                                                <div class="slot-price">62848.16 ECOS Points</div>
+                                            </div>
+                                        </div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     `;
 
@@ -382,6 +465,83 @@
                                     <div class="store-item-slot">
                                         <div class="item-image-placeholder"></div>
                                         <div class="item-text">100000 ECOS Points</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                </div>
+                            `;
+                        } else if (filterType === 'Energy') {
+                            contentHTML = `
+                                <div class="store-item-slots">
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">90 kW</div>
+                                        <div class="item-price">90 ECOS Points</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">350 kW</div>
+                                        <div class="item-price">17.36 ECOS Points</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">1800 kW</div>
+                                        <div class="item-price">89.28 ECOS Points</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">11000 kW</div>
+                                        <div class="item-price">545.60 ECOS Points</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">18000 kW</div>
+                                        <div class="item-price">892.80 ECOS Points</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">72300 kW</div>
+                                        <div class="item-price">3586.08 ECOS Points</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">253300 kW</div>
+                                        <div class="item-price">12563.68 ECOS Points</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">1267100 kW</div>
+                                        <div class="item-price">62848.16 ECOS Points</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                </div>
+                            `;
+                        } else if (filterType === 'Boosts') {
+                            contentHTML = `
+                                <div class="store-subfilter">
+                                    <button class="store-subfilter__button active">TON</button>
+                                    <button class="store-subfilter__button">Stars</button>
+                                </div>
+                                <div class="store-item-slots">
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">Boost 1</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">Boost 2</div>
+                                        <button class="buy-button">Buy</button>
+                                    </div>
+                                    <div class="store-item-slot">
+                                        <div class="item-image-placeholder"></div>
+                                        <div class="item-text">Boost 3</div>
                                         <button class="buy-button">Buy</button>
                                     </div>
                                 </div>
