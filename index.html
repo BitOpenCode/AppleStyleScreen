@@ -94,6 +94,22 @@
             </div>
         </main>
 
+        <!-- Modal for Exchange Confirmation -->
+        <div class="modal-overlay" id="exchange-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Confirm Exchange</h3>
+                </div>
+                <div class="modal-body" id="exchange-confirmation-text">
+                    Are you sure you want to exchange <span id="modal-btc-amount">0</span> BTC for <span id="modal-ecos-amount">0</span> ECOS Points?
+                </div>
+                <div class="modal-buttons">
+                    <button class="modal-button modal-button--yes" id="confirm-exchange">Yes</button>
+                    <button class="modal-button modal-button--no" id="cancel-exchange">No</button>
+                </div>
+            </div>
+        </div>
+
         <nav class="bottom-nav">
             <ul class="bottom-nav__list">
                 <li class="bottom-nav__item">
@@ -418,21 +434,21 @@
                                 </div>
                             `;
                         } else if (filterType === 'ASICs') {
-                            const asicAmounts = [1, 20, 50, 100, 200, 500, 1000, 5000];
-                            const asicPrices = [6250, 125000, 312500, 625000, 1250000, 3125000, 6250000, 12500000]; // Prices in ECOS Points
-                            let asicSlotsHTML = '';
-                            asicAmounts.forEach((amount, index) => {
-                                const price = asicPrices[index];
-                                asicSlotsHTML += `
-                                    <div class="store-item-slot">
-                                        <div class="item-image-placeholder"></div>
-                                        <div class="item-text">${amount} ASIC</div>
-                                        <div class="item-price">${price} ECOS Points</div>
-                                        <button class="buy-button">Buy</button>
-                                    </div>
-                                `;
-                            });
-                            contentHTML = `<div class="store-item-slots">${asicSlotsHTML}</div>`;
+                             const asicAmounts = [1, 20, 50, 100, 200, 500, 1000, 5000];
+                             const asicPrices = [6250, 125000, 312500, 625000, 1250000, 3125000, 6250000, 12500000]; // Prices in ECOS Points
+                             let asicSlotsHTML = '';
+                             asicAmounts.forEach((amount, index) => {
+                                 const price = asicPrices[index];
+                                 asicSlotsHTML += `
+                                     <div class="store-item-slot">
+                                         <div class="item-image-placeholder"></div>
+                                         <div class="item-text">${amount} ASIC</div>
+                                         <div class="item-price">${price} ECOS Points</div>
+                                         <button class="buy-button">Buy</button>
+                                     </div>
+                                 `;
+                             });
+                             contentHTML = `<div class="store-item-slots">${asicSlotsHTML}</div>`;
                         } else if (filterType === 'ECOS Points') {
                             contentHTML = `
                                 <div class="store-subfilter">
@@ -923,10 +939,62 @@
                         const ecosAmount = parseFloat(document.getElementById('ecos-amount').value);
                         
                         if (btcAmount > 0 && ecosAmount > 0) {
-                            // Здесь будет логика обмена
-                            alert(`Exchange ${btcAmount} BTC for ${ecosAmount} ECOS Points`);
+                            // Показываем модальное окно
+                            const modal = document.getElementById('exchange-modal');
+                            document.getElementById('modal-btc-amount').textContent = btcAmount.toFixed(8);
+                            document.getElementById('modal-ecos-amount').textContent = Math.floor(ecosAmount).toString();
+                            modal.classList.add('active');
                         } else {
                             alert('Please enter a valid amount');
+                        }
+                    });
+
+                    // Обработчик кнопки Yes в модальном окне
+                    document.getElementById('confirm-exchange').addEventListener('click', () => {
+                        const btcAmount = parseFloat(document.getElementById('btc-amount').value);
+                        const ecosAmount = parseFloat(document.getElementById('ecos-amount').value);
+                        
+                        // Получаем текущие балансы
+                        const currentBtcBalance = parseFloat(document.getElementById('btc-balance').textContent);
+                        const currentEcosBalance = parseFloat(document.getElementById('ecos-balance').textContent);
+                        
+                        // Проверяем, достаточно ли BTC
+                        if (currentBtcBalance >= btcAmount) {
+                            // Обновляем балансы
+                            const newBtcBalance = (currentBtcBalance - btcAmount).toFixed(8);
+                            const newEcosBalance = Math.floor(currentEcosBalance + ecosAmount);
+                            
+                            // Обновляем отображение балансов
+                            document.getElementById('btc-balance').textContent = newBtcBalance + ' BTC';
+                            document.getElementById('ecos-balance').textContent = newEcosBalance + ' ECOS Points';
+                            
+                            // Обновляем балансы в localStorage
+                            localStorage.setItem('btcBalance', newBtcBalance);
+                            localStorage.setItem('ecosBalance', newEcosBalance);
+                            
+                            // Очищаем поля ввода
+                            document.getElementById('btc-amount').value = '';
+                            document.getElementById('ecos-amount').value = '';
+                            
+                            // Закрываем модальное окно
+                            document.getElementById('exchange-modal').classList.remove('active');
+                            
+                            // Показываем уведомление об успешном обмене
+                            alert(`Successfully exchanged ${btcAmount} BTC for ${Math.floor(ecosAmount)} ECOS Points`);
+                        } else {
+                            alert('Insufficient BTC balance');
+                        }
+                    });
+
+                    // Обработчик кнопки No в модальном окне
+                    document.getElementById('cancel-exchange').addEventListener('click', () => {
+                        document.getElementById('exchange-modal').classList.remove('active');
+                    });
+
+                    // Закрытие модального окна при клике вне его содержимого
+                    document.getElementById('exchange-modal').addEventListener('click', (e) => {
+                        if (e.target === e.currentTarget) {
+                            e.currentTarget.classList.remove('active');
                         }
                     });
 
@@ -937,7 +1005,7 @@
                     document.querySelectorAll('.bottom-nav__link').forEach(link => link.classList.remove('bottom-nav__link--active'));
                     walletButton.classList.add('bottom-nav__link--active');
 
-                    // Clear references to elements that are not on the wallet screen
+                     // Clear references to elements that are not on the wallet screen
                     startMiningButton = null;
                     timerDisplay = null;
                     btcBalanceDisplay = null;
