@@ -400,16 +400,19 @@
                                     <div class="store-item-slot">
                                         <div class="item-image-placeholder"></div>
                                         <div class="item-text">Premium 7 days</div>
+                                        <div class="item-price">1.56 TON</div>
                                         <button class="buy-button">Buy</button>
                                     </div>
                                     <div class="store-item-slot">
                                         <div class="item-image-placeholder"></div>
                                         <div class="item-text">Premium 15 days</div>
+                                        <div class="item-price">3.13 TON</div>
                                         <button class="buy-button">Buy</button>
                                     </div>
                                     <div class="store-item-slot">
                                         <div class="item-image-placeholder"></div>
                                         <div class="item-text">Premium 30 days</div>
+                                        <div class="item-price">4.69 TON</div>
                                         <button class="buy-button">Buy</button>
                                     </div>
                                 </div>
@@ -440,31 +443,37 @@
                                     <div class="store-item-slot">
                                         <div class="item-image-placeholder"></div>
                                         <div class="item-text">5000 ECOS Points</div>
+                                        <div class="item-price">1 TON</div>
                                         <button class="buy-button">Buy</button>
                                     </div>
                                     <div class="store-item-slot">
                                         <div class="item-image-placeholder"></div>
                                         <div class="item-text">10000 ECOS Points</div>
+                                        <div class="item-price">2 TON</div>
                                         <button class="buy-button">Buy</button>
                                     </div>
                                     <div class="store-item-slot">
                                         <div class="item-image-placeholder"></div>
                                         <div class="item-text">15000 ECOS Points</div>
+                                        <div class="item-price">3 TON</div>
                                         <button class="buy-button">Buy</button>
                                     </div>
                                     <div class="store-item-slot">
                                         <div class="item-image-placeholder"></div>
                                         <div class="item-text">20000 ECOS Points</div>
+                                        <div class="item-price">4 TON</div>
                                         <button class="buy-button">Buy</button>
                                     </div>
                                     <div class="store-item-slot">
                                         <div class="item-image-placeholder"></div>
                                         <div class="item-text">50000 ECOS Points</div>
+                                        <div class="item-price">9.5 TON</div>
                                         <button class="buy-button">Buy</button>
                                     </div>
                                     <div class="store-item-slot">
                                         <div class="item-image-placeholder"></div>
                                         <div class="item-text">100000 ECOS Points</div>
+                                        <div class="item-price">15 TON</div>
                                         <button class="buy-button">Buy</button>
                                     </div>
                                 </div>
@@ -775,25 +784,160 @@
                     if (miningInterval) {
                         clearInterval(miningInterval);
                     }
-                    appMain.innerHTML = `
-                        <div class="store-filter-bar">
-                            <button class="filter-button">Premium</button>
-                            <button class="filter-button">ASICs</button>
-                            <button class="filter-button">ECOS Points</button>
-                            <button class="filter-button">Energy</button>
-                            <button class="filter-button">Boosts</button>
-                            <button class="filter-button">Land</button>
-                            <button class="filter-button">Datacenter</button>
-                            <button class="filter-button">EnergyStation</button>
+                    const walletScreenHTML = `
+                        <div class="wallet-screen">
+                            <div class="wallet-balances">
+                                <div class="wallet-balance-item">
+                                    <div class="balance-icon">
+                                        <i class="fab fa-bitcoin"></i>
+                                    </div>
+                                    <div class="balance-info">
+                                        <div class="balance-label">BTC Balance</div>
+                                        <div class="balance-value" id="btc-balance">1.6688 BTC</div>
+                                    </div>
+                                </div>
+                                <div class="wallet-balance-item">
+                                    <div class="balance-icon">
+                                        <i class="fas fa-coins"></i>
+                                    </div>
+                                    <div class="balance-info">
+                                        <div class="balance-label">ECOS Points</div>
+                                        <div class="balance-value" id="ecos-balance">20147 ECOS Points</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="btc-price-section">
+                                <div class="price-header">
+                                    <h2>BTC Price</h2>
+                                    <div class="price-refresh">
+                                        <button id="refresh-price">
+                                            <i class="fas fa-sync-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="price-content">
+                                    <div class="price-item">
+                                        <div class="price-label">Price</div>
+                                        <div class="exchange-price" id="btc-price">Loading...</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="exchange-section">
+                                <div class="exchange-header">
+                                    <h2>Exchange BTC to ECOS Points</h2>
+                                </div>
+                                <div class="exchange-content">
+                                    <div class="exchange-input-group">
+                                        <div class="exchange-label">You send</div>
+                                        <div class="exchange-input-wrapper">
+                                            <input type="number" id="btc-amount" min="0" step="0.00000001" placeholder="0.00000000">
+                                            <div class="exchange-currency">BTC</div>
+                                        </div>
+                                    </div>
+                                    <div class="exchange-arrow">
+                                        <i class="fas fa-exchange-alt"></i>
+                                    </div>
+                                    <div class="exchange-input-group">
+                                        <div class="exchange-label">You receive</div>
+                                        <div class="exchange-input-wrapper">
+                                            <input type="number" id="ecos-amount" readonly placeholder="0">
+                                            <div class="exchange-currency">ECOS Points</div>
+                                        </div>
+                                    </div>
+                                    <div class="exchange-rate">
+                                        <span>Rate: </span>
+                                        <span id="exchange-rate">1 BTC = 0 ECOS Points</span>
+                                    </div>
+                                    <button class="exchange-button" id="exchange-button">Exchange</button>
+                                </div>
+                            </div>
                         </div>
-                        <h2>Store Screen Content</h2>
-                        <p>This is where the store content will go.</p>
-                    `; // Replace content
+                    `;
+                    appMain.innerHTML = walletScreenHTML;
+
+                    // Функция для обновления цены BTC через WebSocket
+                    function initBTCPrice() {
+                        const ws = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@trade');
+                        
+                        ws.onmessage = (event) => {
+                            try {
+                                const data = JSON.parse(event.data);
+                                const price = parseFloat(data.p);
+                                // Сохраняем цену в data-атрибуте для точного использования
+                                document.getElementById('btc-price').setAttribute('data-price', price);
+                                document.getElementById('btc-price').textContent = `$${price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                                
+                                // Обновляем курс обмена
+                                updateExchangeRate(price);
+                            } catch (error) {
+                                console.error('Error parsing WebSocket data:', error);
+                            }
+                        };
+
+                        ws.onerror = (error) => {
+                            console.error('WebSocket error:', error);
+                            document.getElementById('btc-price').textContent = 'Error';
+                        };
+
+                        ws.onclose = () => {
+                            console.log('WebSocket connection closed');
+                            // Попытка переподключения через 5 секунд
+                            setTimeout(initBTCPrice, 5000);
+                        };
+
+                        // Обработчик для кнопки обновления
+                        document.getElementById('refresh-price').addEventListener('click', () => {
+                            if (ws.readyState === WebSocket.OPEN) {
+                                ws.send(JSON.stringify({ method: "SUBSCRIBE", params: ["btcusdt@trade"], id: 1 }));
+                            }
+                        });
+                    }
+
+                    // Функция обновления курса обмена
+                    function updateExchangeRate(btcPrice) {
+                        const rateElement = document.getElementById('exchange-rate');
+                        rateElement.textContent = `1 BTC = ${btcPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} ECOS Points`;
+                    }
+
+                    // Функция обновления суммы ECOS Points при вводе BTC
+                    function updateEcosAmount() {
+                        const btcInput = document.getElementById('btc-amount');
+                        const ecosInput = document.getElementById('ecos-amount');
+                        // Используем сохраненное точное значение цены
+                        const btcPrice = parseFloat(document.getElementById('btc-price').getAttribute('data-price'));
+                        
+                        if (btcInput.value && btcPrice) {
+                            const ecosAmount = parseFloat(btcInput.value) * btcPrice;
+                            ecosInput.value = Math.floor(ecosAmount).toString();
+                        } else {
+                            ecosInput.value = '';
+                        }
+                    }
+
+                    // Добавляем обработчики событий
+                    document.getElementById('btc-amount').addEventListener('input', updateEcosAmount);
+
+                    // Обработчик кнопки обмена
+                    document.getElementById('exchange-button').addEventListener('click', () => {
+                        const btcAmount = parseFloat(document.getElementById('btc-amount').value);
+                        const ecosAmount = parseFloat(document.getElementById('ecos-amount').value);
+                        
+                        if (btcAmount > 0 && ecosAmount > 0) {
+                            // Здесь будет логика обмена
+                            alert(`Exchange ${btcAmount} BTC for ${ecosAmount} ECOS Points`);
+                        } else {
+                            alert('Please enter a valid amount');
+                        }
+                    });
+
+                    // Инициализируем WebSocket при загрузке экрана
+                    initBTCPrice();
+
                     // Optionally update active class for navigation links
                     document.querySelectorAll('.bottom-nav__link').forEach(link => link.classList.remove('bottom-nav__link--active'));
                     walletButton.classList.add('bottom-nav__link--active');
 
-                     // Clear references to elements that are not on the wallet screen
+                    // Clear references to elements that are not on the wallet screen
                     startMiningButton = null;
                     timerDisplay = null;
                     btcBalanceDisplay = null;
