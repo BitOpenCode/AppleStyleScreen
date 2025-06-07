@@ -1051,6 +1051,309 @@
                 });
             }
 
+            // Обработка навигации
+            const navLinks = document.querySelectorAll('.bottom-nav__link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Убираем активный класс у всех ссылок
+                    navLinks.forEach(l => l.classList.remove('bottom-nav__link--active'));
+                    // Добавляем активный класс нажатой ссылке
+                    link.classList.add('bottom-nav__link--active');
+                    
+                    // Определяем текущий экран
+                    const screen = link.querySelector('.bottom-nav__text').textContent.toLowerCase();
+                    updateScreen(screen);
+                });
+            });
+
+            // Функция обновления экрана
+            function updateScreen(screen) {
+                const mainContent = document.querySelector('.app-main');
+                
+                if (screen === 'home') {
+                    mainContent.innerHTML = `
+                        <div class="circular-buttons">
+                            <div class="circular-button">
+                                <span>200kw/1000kw</span>
+                            </div>
+                            <div class="circular-button">
+                                <span>234Th</span>
+                            </div>
+                            <div class="circular-button">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Progress</span>
+                            </div>
+                        </div>
+                        <div class="timer">5:33:10</div>
+                        <button class="start-mining-button">Start Mining</button>
+                        <div class="game-content">
+                            <div class="asic-miner">
+                                <div class="asic-miner__image"></div>
+                                <div class="asic-miner__text">ASIC Miner</div>
+                            </div>
+                            <div class="game-buttons">
+                                <div class="game-buttons__left">
+                                    <button class="game-button game-button--primary">
+                                        <i class="fas fa-bolt"></i>
+                                        Daily Combo
+                                    </button>
+                                    <button class="game-button game-button--secondary">
+                                        <i class="fas fa-gift"></i>
+                                        Special Offers
+                                    </button>
+                                </div>
+                                <div class="game-buttons__right">
+                                    <button class="game-button game-button--primary">
+                                        <i class="fas fa-tasks"></i>
+                                        Daily Tasks
+                                    </button>
+                                    <button class="game-button game-button--secondary">
+                                        <i class="fas fa-arrow-up"></i>
+                                        Upgrade
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (screen === 'earn') {
+                    mainContent.innerHTML = `
+                        <div class="earn-screen">
+                            <div class="earn-filters">
+                                <button class="earn-filter active" data-filter="daily">Daily</button>
+                                <button class="earn-filter" data-filter="ingame">InGame</button>
+                                <button class="earn-filter" data-filter="partners">Partners</button>
+                                <button class="earn-filter" data-filter="influencers">Influencers</button>
+                            </div>
+                            <div class="earn-content">
+                                <div class="earn-items" id="earn-items">
+                                    <!-- Здесь будут отображаться элементы в зависимости от выбранного фильтра -->
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    // Добавляем обработчики для фильтров
+                    const filterButtons = document.querySelectorAll('.earn-filter');
+                    filterButtons.forEach(button => {
+                        button.addEventListener('click', () => {
+                            // Убираем активный класс у всех кнопок
+                            filterButtons.forEach(btn => btn.classList.remove('active'));
+                            // Добавляем активный класс нажатой кнопке
+                            button.classList.add('active');
+                            // Получаем тип фильтра
+                            const filter = button.dataset.filter;
+                            // Обновляем содержимое
+                            updateEarnContent(filter);
+                        });
+                    });
+
+                    // Инициализируем контент с фильтром Daily
+                    updateEarnContent('daily');
+                } else if (screen === 'stat') {
+                    mainContent.innerHTML = `
+                        <div class="stat-screen">
+                            <div class="stat-filters">
+                                <button class="stat-filter active" data-filter="your">Your Stat</button>
+                                <button class="stat-filter" data-filter="overall">Overall</button>
+                                <button class="stat-filter" data-filter="weekly">Weekly</button>
+                                <button class="stat-filter" data-filter="guild">Guild</button>
+                            </div>
+                            <div class="stat-content">
+                                <!-- Контент будет обновляться через updateStatContent -->
+                            </div>
+                        </div>
+                    `;
+                    updateStatContent('your');
+                }
+            }
+
+            // Функция обновления содержимого Earn в зависимости от фильтра
+            function updateEarnContent(filter) {
+                const content = document.querySelector('.earn-content');
+                let itemsHTML = '';
+
+                switch(filter) {
+                    case 'daily':
+                        itemsHTML = `
+                            <div class="earn-items">
+                                <div class="earn-item">
+                                    <div class="earn-item__icon">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <div class="earn-item__content">
+                                        <h3>Daily Login</h3>
+                                        <p>Login daily to earn ECOS Points</p>
+                                        <div class="earn-item__reward">+100 ECOS Points</div>
+                                    </div>
+                                    <button class="earn-item__button">Start</button>
+                                </div>
+                                <div class="earn-item">
+                                    <div class="earn-item__icon">
+                                        <i class="fas fa-tasks"></i>
+                                    </div>
+                                    <div class="earn-item__content">
+                                        <h3>Daily Tasks</h3>
+                                        <p>Complete daily tasks to earn more</p>
+                                        <div class="earn-item__reward">+50 ECOS Points</div>
+                                    </div>
+                                    <button class="earn-item__button">Start</button>
+                                </div>
+                            </div>
+                        `;
+                        break;
+                    case 'ingame':
+                        itemsHTML = `
+                            <div class="earn-item">
+                                <div class="earn-item__icon"><i class="fas fa-gamepad"></i></div>
+                                <div class="earn-item__content">
+                                    <h3>Mining Bonus</h3>
+                                    <p>Mine for 1 hour</p>
+                                    <div class="earn-item__reward">+1000 ECOS Points</div>
+                                </div>
+                                <button class="earn-item__button">Start</button>
+                            </div>
+                            <div class="earn-item">
+                                <div class="earn-item__icon"><i class="fas fa-trophy"></i></div>
+                                <div class="earn-item__content">
+                                    <h3>Level Up</h3>
+                                    <p>Reach next level</p>
+                                    <div class="earn-item__reward">+2000 ECOS Points</div>
+                                </div>
+                                <button class="earn-item__button">Progress</button>
+                            </div>
+                        `;
+                        break;
+                    case 'partners':
+                        itemsHTML = `
+                            <div class="earn-item">
+                                <div class="earn-item__icon"><i class="fas fa-handshake"></i></div>
+                                <div class="earn-item__content">
+                                    <h3>Partner Program</h3>
+                                    <p>Join our partner program</p>
+                                    <div class="earn-item__reward">+5000 ECOS Points</div>
+                                </div>
+                                <button class="earn-item__button">Join</button>
+                            </div>
+                            <div class="earn-item">
+                                <div class="earn-item__icon"><i class="fas fa-users"></i></div>
+                                <div class="earn-item__content">
+                                    <h3>Refer Friends</h3>
+                                    <p>Invite friends to join</p>
+                                    <div class="earn-item__reward">+1000 ECOS Points</div>
+                                </div>
+                                <button class="earn-item__button">Invite</button>
+                            </div>
+                        `;
+                        break;
+                    case 'influencers':
+                        itemsHTML = `
+                            <div class="earn-item">
+                                <div class="earn-item__icon"><i class="fas fa-star"></i></div>
+                                <div class="earn-item__content">
+                                    <h3>Content Creation</h3>
+                                    <p>Create content about our game</p>
+                                    <div class="earn-item__reward">+10000 ECOS Points</div>
+                                </div>
+                                <button class="earn-item__button">Submit</button>
+                            </div>
+                            <div class="earn-item">
+                                <div class="earn-item__icon"><i class="fas fa-bullhorn"></i></div>
+                                <div class="earn-item__content">
+                                    <h3>Promotion</h3>
+                                    <p>Promote our game</p>
+                                    <div class="earn-item__reward">+5000 ECOS Points</div>
+                                </div>
+                                <button class="earn-item__button">Start</button>
+                            </div>
+                        `;
+                        break;
+                }
+
+                content.innerHTML = itemsHTML;
+            }
+
+            // Функция обновления содержимого Stat в зависимости от фильтра
+            function updateStatContent(filter) {
+                const content = document.querySelector('.stat-content');
+                let itemsHTML = '';
+
+                switch(filter) {
+                    case 'your':
+                        itemsHTML = `
+                            <div class="stat-items">
+                                <div class="stat-item">
+                                    <div class="stat-item__icon">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="stat-item__content">
+                                        <h3>Your Statistics</h3>
+                                        <p>View your personal achievements</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        break;
+                    case 'overall':
+                        itemsHTML = `
+                            <div class="stat-items">
+                                <div class="stat-item">
+                                    <div class="stat-item__icon">
+                                        <i class="fas fa-globe"></i>
+                                    </div>
+                                    <div class="stat-item__content">
+                                        <h3>Overall Statistics</h3>
+                                        <p>View global achievements</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        break;
+                    case 'weekly':
+                        itemsHTML = `
+                            <div class="stat-items">
+                                <div class="stat-item">
+                                    <div class="stat-item__icon">
+                                        <i class="fas fa-calendar-week"></i>
+                                    </div>
+                                    <div class="stat-item__content">
+                                        <h3>Weekly Statistics</h3>
+                                        <p>View weekly achievements</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        break;
+                    case 'guild':
+                        itemsHTML = `
+                            <div class="stat-items">
+                                <div class="stat-item">
+                                    <div class="stat-item__icon">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="stat-item__content">
+                                        <h3>Guild Statistics</h3>
+                                        <p>View guild achievements</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        break;
+                }
+
+                content.innerHTML = itemsHTML;
+            }
+
+            // Добавляем обработчики для фильтров Stat
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('stat-filter')) {
+                    const filters = document.querySelectorAll('.stat-filter');
+                    filters.forEach(filter => filter.classList.remove('active'));
+                    e.target.classList.add('active');
+                    updateStatContent(e.target.dataset.filter);
+                }
+            });
+
         });
     </script>
 </body>
