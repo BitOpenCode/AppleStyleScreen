@@ -62,7 +62,11 @@
                     <span>Progress</span>
                 </div>
             </div>
-            <div class="timer">5:33:10</div>
+            <div class="timer">
+                <span class="timer__hours">00</span>:
+                <span class="timer__minutes">00</span>:
+                <span class="timer__seconds">00</span>
+            </div>
             <button class="start-mining-button">Start Mining</button>
             <div class="game-content">
                 <div class="asic-miner">
@@ -158,6 +162,7 @@
             const profitAmount = 0.0001287;
             const energyCostPerSession = 3.51; // Energy cost for one mining session
             let timeRemaining = miningDuration;
+            let isMining = false;
 
             function formatTime(seconds) {
                 const h = Math.floor(seconds / 3600);
@@ -221,6 +226,7 @@
                             // Start Mining
                             targetButton.disabled = true;
                             targetButton.textContent = 'Mining...';
+                            targetButton.classList.add('mining');
                             currentTimerDisplay.style.visibility = 'visible';
 
                             timeRemaining = miningDuration;
@@ -257,6 +263,7 @@
                     // Claim Profit
                     addProfit();
                     targetButton.textContent = 'Start Mining';
+                    targetButton.classList.remove('mining');
                 }
                 // If text is 'Mining...', do nothing (button is disabled)
             }
@@ -664,7 +671,7 @@
                              const itemText = itemSlot ? itemSlot.querySelector('.item-text').textContent : 'Unknown Item';
                               console.log(`Buy button clicked for item: ${itemText}`);
                                // Add your purchase logic here
-                               alert(`Покупка: ${itemText}`);
+                               alert(`Purchase: ${itemText}`);
                           }
                      });
 
@@ -806,7 +813,7 @@
                                 <div class="wallet-balance-item">
                                     <div class="balance-icon">
                                         <i class="fab fa-bitcoin"></i>
-                                    </div>
+                        </div>
                                     <div class="balance-info">
                                         <div class="balance-label">BTC Balance</div>
                                         <div class="balance-value" id="btc-balance">1.6688 BTC</div>
@@ -1085,7 +1092,11 @@
                                 <span>Progress</span>
                             </div>
                         </div>
-                        <div class="timer">5:33:10</div>
+                        <div class="timer">
+                            <span class="timer__hours">00</span>:
+                            <span class="timer__minutes">00</span>:
+                            <span class="timer__seconds">00</span>
+                        </div>
                         <button class="start-mining-button">Start Mining</button>
                         <div class="game-content">
                             <div class="asic-miner">
@@ -1351,6 +1362,98 @@
                     filters.forEach(filter => filter.classList.remove('active'));
                     e.target.classList.add('active');
                     updateStatContent(e.target.dataset.filter);
+                }
+            });
+
+            // Добавляем обработчик для кнопки колокольчика
+            const notificationButton = document.querySelector('.header-action-link[href="#"]');
+            if (notificationButton) {
+                notificationButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const mainContent = document.querySelector('.app-main');
+                    mainContent.innerHTML = `
+                        <div class="notifications-screen">
+                            <div class="notifications-header">
+                                <h2>Notifications</h2>
+                            </div>
+                            <div class="notifications-content">
+                                <div class="notification-item">
+                                    <div class="notification-icon">
+                                        <i class="fas fa-bell"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <h3>New Notification</h3>
+                                        <p>You have new notifications</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            // Добавляем обработчик для кнопки настроек
+            const settingsButton = document.querySelectorAll('.header-action-link')[1];
+            if (settingsButton) {
+                settingsButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const mainContent = document.querySelector('.app-main');
+                    mainContent.innerHTML = `
+                        <div class="settings-screen">
+                            <div class="settings-header">
+                                <h2>Settings</h2>
+                            </div>
+                            <div class="settings-content">
+                                <div class="settings-section">
+                                    <h3>General Settings</h3>
+                                    <div class="settings-item">
+                                        <div class="settings-item__icon">
+                                            <i class="fas fa-language"></i>
+                                        </div>
+                                        <div class="settings-item__content">
+                                            <h4>Language</h4>
+                                            <p>Choose your preferred language</p>
+                                        </div>
+                                    </div>
+                                    <div class="settings-item">
+                                        <div class="settings-item__icon">
+                                            <i class="fas fa-moon"></i>
+                                        </div>
+                                        <div class="settings-item__content">
+                                            <h4>Theme</h4>
+                                            <p>Choose light or dark theme</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="settings-section">
+                                    <h3>Notifications</h3>
+                                    <div class="settings-item">
+                                        <div class="settings-item__icon">
+                                            <i class="fas fa-bell"></i>
+                                        </div>
+                                        <div class="settings-item__content">
+                                            <h4>Push Notifications</h4>
+                                            <p>Enable or disable notifications</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            startMiningButton.addEventListener('click', function() {
+                if (!isMining) {
+                    isMining = true;
+                    startMiningButton.textContent = 'Mining...';
+                    startMiningButton.classList.add('mining');
+                    startTimer();
+                } else {
+                    isMining = false;
+                    startMiningButton.textContent = 'Start Mining';
+                    startMiningButton.classList.remove('mining');
+                    stopTimer();
                 }
             });
 

@@ -971,6 +971,14 @@ body {
     background-color: var(--colors-primary--600);
 }
 
+.start-mining-button.mining {
+    background-color: #ff8c00;
+}
+
+.start-mining-button.mining:hover {
+    background-color: #e67e00;
+}
+
 /* Wallet Screen Styles */
 .wallet-screen {
     padding: 1rem;
@@ -1592,6 +1600,159 @@ body {
 }
 
 .stat-item__content p {
+    font-family: var(--fonts-secondary);
+    font-size: 0.9rem;
+    color: var(--colors-primary--300);
+    margin: 0;
+}
+
+/* Notifications Screen Styles */
+.notifications-screen {
+    padding: 1rem;
+    background: var(--background-color);
+    min-height: 100%;
+}
+
+.notifications-header {
+    margin-bottom: 1rem;
+}
+
+.notifications-header h2 {
+    font-family: var(--fonts-primary);
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.notifications-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.notification-item {
+    background-color: var(--colors-bg--300);
+    border: 2px solid var(--colors-primary--600);
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: var(--ui-glow);
+}
+
+.notification-icon {
+    width: 80px;
+    height: 80px;
+    background-color: var(--colors-bg--500);
+    border: 1px dashed var(--colors-primary--500);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--fonts-secondary);
+    color: var(--colors-primary--500);
+    text-align: center;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-content h3 {
+    font-family: var(--fonts-secondary);
+    font-size: 1.1rem;
+    color: var(--colors-primary--200);
+    text-shadow: var(--ui-glow-text--dimmed);
+    margin: 0 0 0.5rem 0;
+}
+
+.notification-content p {
+    font-family: var(--fonts-secondary);
+    font-size: 0.9rem;
+    color: var(--colors-primary--300);
+    margin: 0;
+}
+
+/* Settings Screen Styles */
+.settings-screen {
+    padding: 1rem;
+    background: var(--background-color);
+    min-height: 100%;
+}
+
+.settings-header {
+    margin-bottom: 1.5rem;
+}
+
+.settings-header h2 {
+    font-family: var(--fonts-primary);
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.settings-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.settings-section {
+    background-color: var(--colors-bg--300);
+    border: 2px solid var(--colors-primary--600);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: var(--ui-glow);
+}
+
+.settings-section h3 {
+    font-family: var(--fonts-primary);
+    font-size: 1.2rem;
+    color: var(--colors-primary--200);
+    margin: 0 0 1rem 0;
+    text-shadow: var(--ui-glow-text--dimmed);
+}
+
+.settings-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--colors-primary--600);
+}
+
+.settings-item:last-child {
+    border-bottom: none;
+}
+
+.settings-item__icon {
+    width: 60px;
+    height: 60px;
+    background-color: var(--colors-bg--500);
+    border: 1px dashed var(--colors-primary--500);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--fonts-secondary);
+    color: var(--colors-primary--500);
+    text-align: center;
+}
+
+.settings-item__content {
+    flex: 1;
+}
+
+.settings-item__content h4 {
+    font-family: var(--fonts-secondary);
+    font-size: 1.1rem;
+    color: var(--colors-primary--200);
+    text-shadow: var(--ui-glow-text--dimmed);
+    margin: 0 0 0.5rem 0;
+}
+
+.settings-item__content p {
     font-family: var(--fonts-secondary);
     font-size: 0.9rem;
     color: var(--colors-primary--300);
