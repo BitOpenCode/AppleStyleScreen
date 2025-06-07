@@ -162,7 +162,6 @@
             const profitAmount = 0.0001287;
             const energyCostPerSession = 3.51; // Energy cost for one mining session
             let timeRemaining = miningDuration;
-            let isMining = false;
 
             function formatTime(seconds) {
                 const h = Math.floor(seconds / 3600);
@@ -226,7 +225,6 @@
                             // Start Mining
                             targetButton.disabled = true;
                             targetButton.textContent = 'Mining...';
-                            targetButton.classList.add('mining');
                             currentTimerDisplay.style.visibility = 'visible';
 
                             timeRemaining = miningDuration;
@@ -263,7 +261,6 @@
                     // Claim Profit
                     addProfit();
                     targetButton.textContent = 'Start Mining';
-                    targetButton.classList.remove('mining');
                 }
                 // If text is 'Mining...', do nothing (button is disabled)
             }
@@ -1442,20 +1439,6 @@
                     `;
                 });
             }
-
-            startMiningButton.addEventListener('click', function() {
-                if (!isMining) {
-                    isMining = true;
-                    startMiningButton.textContent = 'Mining...';
-                    startMiningButton.classList.add('mining');
-                    startTimer();
-                } else {
-                    isMining = false;
-                    startMiningButton.textContent = 'Start Mining';
-                    startMiningButton.classList.remove('mining');
-                    stopTimer();
-                }
-            });
 
         });
     </script>

@@ -971,14 +971,6 @@ body {
     background-color: var(--colors-primary--600);
 }
 
-.start-mining-button.mining {
-    background-color: #ff8c00;
-}
-
-.start-mining-button.mining:hover {
-    background-color: #e67e00;
-}
-
 /* Wallet Screen Styles */
 .wallet-screen {
     padding: 1rem;
